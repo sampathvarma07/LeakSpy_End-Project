@@ -14,7 +14,7 @@ leakspy.so: src/interpose.c
 leakspy-symbolize: cli/leakspy-symbolize.c
 	$(CC) $(CFLAGS) $< -o $@
 
-tests: tests/test_leak tests/test_normal tests/test_calloc tests/test_realloc
+tests: tests/test_leak tests/test_normal tests/test_calloc tests/test_realloc tests/test_realloc_fail
 
 tests/test_leak: tests/test_leak.c
 	$(CC) $(CFLAGS) -no-pie $< -o $@
@@ -28,9 +28,12 @@ tests/test_calloc: tests/test_calloc.c
 tests/test_realloc: tests/test_realloc.c
 	$(CC) $(CFLAGS) -no-pie $< -o $@
 
+tests/test_realloc_fail: tests/test_realloc_fail.c
+	$(CC) $(CFLAGS) -no-pie $< -o $@
+
 clean:
 	rm -f leakspy leakspy.so leakspy-symbolize
 	rm -f tests/test_leak tests/test_normal
-	rm -f tests/test_calloc tests/test_realloc
+	rm -f tests/test_calloc tests/test_realloc tests/test_realloc_fail
 
 .PHONY: all tests clean

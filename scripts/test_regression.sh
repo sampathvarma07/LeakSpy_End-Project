@@ -45,7 +45,7 @@ if [[ ! -f "$ROOT/leakspy.so" ]]; then
     exit 2
 fi
 
-for name in test_leak test_normal test_calloc test_realloc; do
+for name in test_leak test_normal test_calloc test_realloc test_realloc_fail; do
     if [[ ! -x "$ROOT/tests/$name" ]]; then
         echo "ERROR: $ROOT/tests/$name is missing. Run make first."
         exit 2
@@ -56,6 +56,7 @@ run_test test_leak 1 40
 run_test test_normal 0 0
 run_test test_calloc 1 40
 run_test test_realloc 1 40
+run_test test_realloc_fail 1 40
 
 echo
 echo "========== Regression Test Summary =========="
