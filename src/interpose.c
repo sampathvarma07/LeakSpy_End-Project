@@ -333,7 +333,7 @@ static void print_summary(void)
     if (dropped_records > 0) {
         const char warning[] =
             "WARNING: Leak tracking is incomplete. "
-            "Some allocation records could not be stored.\n";
+            "Some successful allocations could not be fully tracked.\n";
 
         write_message(warning, sizeof(warning) - 1);
     }
