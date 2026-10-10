@@ -74,9 +74,38 @@ static void show_report_file(const char *path, const char *title)
     fclose(file);
 }
 
+static void display_report(
+    const char *report_path,
+    const char *symbolizer_path,
+    const char *program_path,
+    const char *maps_path);
+
 static void show_previous_report(void)
 {
-    show_report_file(REPORT_PATH, "Saved LeakSpy Report");
+    char project_path[PATH_MAX];
+    char symbolizer_path[PATH_MAX];
+    char program_path[PATH_MAX];
+    char report_path[PATH_MAX];
+    char maps_path[PATH_MAX];
+
+    if (!getcwd(project_path, sizeof(project_path))) {
+        perror("getcwd");
+        return;
+    }
+
+    if (snprintf(symbolizer_path, sizeof(symbolizer_path),
+                 "%s/leakspy-symbolize", project_path) >= (int)sizeof(symbolizer_path) ||
+        snprintf(program_path, sizeof(program_path),
+                 "%s/tests/test_leak", project_path) >= (int)sizeof(program_path) ||
+        snprintf(report_path, sizeof(report_path),
+                 "%s/%s", project_path, REPORT_PATH) >= (int)sizeof(report_path) ||
+        snprintf(maps_path, sizeof(maps_path),
+                 "%s/%s", project_path, MAPS_PATH) >= (int)sizeof(maps_path)) {
+        fprintf(stderr, "Project path is too long.\\n");
+        return;
+    }
+
+    display_report(report_path, symbolizer_path, program_path, maps_path);
 }
 
 static void analyze_existing_log(void)
@@ -96,7 +125,9 @@ static void analyze_existing_log(void)
 
     path[strcspn(path, "\r\n")] = '\0';
 
-    if (path[0] == '\0')
+    int use_latest_report = (path[0] == '\0');
+
+    if (use_latest_report)
         snprintf(path, sizeof(path), "%s", REPORT_PATH);
 
     struct stat info;
@@ -111,7 +142,35 @@ static void analyze_existing_log(void)
         return;
     }
 
-    show_report_file(path, "Log Analysis");
+    if (!use_latest_report) {
+        show_report_file(path, "Log Analysis");
+        return;
+    }
+
+    char project_path[PATH_MAX];
+    char symbolizer_path[PATH_MAX];
+    char program_path[PATH_MAX];
+    char report_path[PATH_MAX];
+    char maps_path[PATH_MAX];
+
+    if (!getcwd(project_path, sizeof(project_path))) {
+        perror("getcwd");
+        return;
+    }
+
+    if (snprintf(symbolizer_path, sizeof(symbolizer_path),
+                 "%s/leakspy-symbolize", project_path) >= (int)sizeof(symbolizer_path) ||
+        snprintf(program_path, sizeof(program_path),
+                 "%s/tests/test_leak", project_path) >= (int)sizeof(program_path) ||
+        snprintf(report_path, sizeof(report_path),
+                 "%s/%s", project_path, REPORT_PATH) >= (int)sizeof(report_path) ||
+        snprintf(maps_path, sizeof(maps_path),
+                 "%s/%s", project_path, MAPS_PATH) >= (int)sizeof(maps_path)) {
+        fprintf(stderr, "Project path is too long.\\n");
+        return;
+    }
+
+    display_report(report_path, symbolizer_path, program_path, maps_path);
 }
 
 static void show_settings(void)
