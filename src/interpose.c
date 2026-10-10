@@ -330,6 +330,14 @@ static void print_summary(void)
         write_message(message, bytes);
     }
 
+    if (dropped_records > 0) {
+        const char warning[] =
+            "WARNING: Leak tracking is incomplete. "
+            "Some allocation records could not be stored.\n";
+
+        write_message(warning, sizeof(warning) - 1);
+    }
+
     size_t leak_count = 0;
     size_t leak_bytes = 0;
 
