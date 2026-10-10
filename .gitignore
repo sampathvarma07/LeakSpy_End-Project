@@ -18,3 +18,4 @@
 *.core
 core
 /tests/test_realloc_fail
+/tests/test_calloc_overflow
