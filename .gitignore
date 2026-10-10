@@ -1,0 +1,19 @@
+# Compiled binaries
+/leakspy
+/leakspy.so
+/leakspy-symbolize
+
+# Compiled test executables
+/tests/test_leak
+/tests/test_normal
+/tests/test_calloc
+/tests/test_realloc
+
+# Generated reports and process mappings
+/reports/*.log
+/reports/*.maps
+
+# Temporary files
+*.tmp
+*.core
+core
