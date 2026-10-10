@@ -17,3 +17,4 @@
 *.tmp
 *.core
 core
+/tests/test_realloc_fail
